@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Prediction of Wind Power Generation</title>
+  {% load static %}
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <style>
+    .back {
+      background-image: url("{% static 'image/wind.jpg' %}");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .white {
+      color: white;
+    }
+    .dropdown-menu {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .weather-info {
+      margin-top: 20px;
+      background: yellow;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body class="back">
+  <div class="container">
+    <div class="jumbotron text-center">
+      <h1>PREDICTION OF WIND POWER GENERATION</h1>
+    </div>
+
+    <!-- Weather Check Section -->
+    <div class="text-right">
+      <form class="form-inline" action="{% url 'check_weather' %}" method="post">
+        {% csrf_token %}
+        <label for="city" class="white">Select District:</label>
+        <select class="form-control" name="city" required>
+          <option value="Ariyalur" {% if weather_data.city == "Ariyalur" %}selected{% endif %}>Ariyalur</option>
+          <option value="Chengalpattu" {% if weather_data.city == "Chengalpattu" %}selected{% endif %}>Chengalpattu</option>
+          <option value="Chennai" {% if weather_data.city == "Chennai" %}selected{% endif %}>Chennai</option>
+          <option value="Coimbatore" {% if weather_data.city == "Coimbatore" %}selected{% endif %}>Coimbatore</option>
+          <option value="Cuddalore" {% if weather_data.city == "Cuddalore" %}selected{% endif %}>Cuddalore</option>
+          <option value="Dharmapuri" {% if weather_data.city == "Dharmapuri" %}selected{% endif %}>Dharmapuri</option>
+          <option value="Dindigul" {% if weather_data.city == "Dindigul" %}selected{% endif %}>Dindigul</option>
+          <option value="Erode" {% if weather_data.city == "Erode" %}selected{% endif %}>Erode</option>
+          <option value="Kanchipuram" {% if weather_data.city == "Kanchipuram" %}selected{% endif %}>Kanchipuram</option>
+          <option value="Kanyakumari" {% if weather_data.city == "Kanyakumari" %}selected{% endif %}>Kanyakumari</option>
+          <option value="Karur" {% if weather_data.city == "Karur" %}selected{% endif %}>Karur</option>
+          <option value="Krishnagiri" {% if weather_data.city == "Krishnagiri" %}selected{% endif %}>Krishnagiri</option>
+          <option value="Madurai" {% if weather_data.city == "Madurai" %}selected{% endif %}>Madurai</option>
+          <option value="Mayiladuthurai" {% if weather_data.city == "Mayiladuthurai" %}selected{% endif %}>Mayiladuthurai</option>
+          <option value="Nagapattinam" {% if weather_data.city == "Nagapattinam" %}selected{% endif %}>Nagapattinam</option>
+          <option value="Namakkal" {% if weather_data.city == "Namakkal" %}selected{% endif %}>Namakkal</option>
+          <option value="Nilgiris" {% if weather_data.city == "Nilgiris" %}selected{% endif %}>Nilgiris</option>
+          <option value="Perambalur" {% if weather_data.city == "Perambalur" %}selected{% endif %}>Perambalur</option>
+          <option value="Pudukkottai" {% if weather_data.city == "Pudukkottai" %}selected{% endif %}>Pudukkottai</option>
+          <option value="Ramanathapuram" {% if weather_data.city == "Ramanathapuram" %}selected{% endif %}>Ramanathapuram</option>
+          <option value="Tenkasi" {% if weather_data.city == "Tenkasi" %}selected{% endif %}>Tenkasi</option>
+          <option value="Thanjavur" {% if weather_data.city == "Thanjavur" %}selected{% endif %}>Thanjavur</option>
+          <option value="Theni" {% if weather_data.city == "Theni" %}selected{% endif %}>Theni</option>
+          <option value="Thoothukudi" {% if weather_data.city == "Thoothukudi" %}selected{% endif %}>Thoothukudi</option>
+          <option value="Tiruchirappalli" {% if weather_data.city == "Tiruchirappalli" %}selected{% endif %}>Tiruchirappalli</option>
+          <option value="Tirunelveli" {% if weather_data.city == "Tirunelveli" %}selected{% endif %}>Tirunelveli</option>
+          <option value="Tirupathur" {% if weather_data.city == "Tirupathur" %}selected{% endif %}>Tirupathur</option>
+          <option value="Tiruppur" {% if weather_data.city == "Tiruppur" %}selected{% endif %}>Tiruppur</option>
+          <option value="Tiruvallur" {% if weather_data.city == "Tiruvallur" %}selected{% endif %}>Tiruvallur</option>
+          <option value="Tiruvannamalai" {% if weather_data.city == "Tiruvannamalai" %}selected{% endif %}>Tiruvannamalai</option>
+          <option value="Tiruvarur" {% if weather_data.city == "Tiruvarur" %}selected{% endif %}>Tiruvarur</option>
+          <option value="Vellore" {% if weather_data.city == "Vellore" %}selected{% endif %}>Vellore</option>
+          <option value="Viluppuram" {% if weather_data.city == "Viluppuram" %}selected{% endif %}>Viluppuram</option>
+          <option value="Virudhunagar" {% if weather_data.city == "Virudhunagar" %}selected{% endif %}>Virudhunagar</option>
+        </select>        
+        <button type="submit" class="btn btn-info">Check Weather Condition</button>
+      </form>
+    </div>
+
+    {% if weather_data %}
+    <div class="weather-info">
+      <h4>Weather Conditions in {{ weather_data.city }}:</h4>
+      <table class="table table-bordered">
+        <tr>
+          <th>Wind Speed (m/s)</th>
+          <td>{{ weather_data.wind_speed }}</td>
+        </tr>
+        <tr>
+          <th>Wind Direction (degrees)</th>
+          <td>{{ weather_data.wind_direction }}</td>
+        </tr>
+        <tr>
+          <th>Pressure (atm)</th>
+          <td>{{ weather_data.pressure }}</td>
+        </tr>
+        <tr>
+          <th>Temperature (°C)</th>
+          <td>{{ weather_data.temperature }}</td>
+        </tr>
+      </table>
+    </div>
+    {% endif %}
+
+    <!-- Prediction Form -->
+    <div>
+      <form class="form-group" action="{% url 'predict' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6">
+            <label class="white" for="">Wind Speed</label>
+            <input type="number" class="form-control" step="0.01" name="Wind_speed" placeholder="Wind Speed" required><br>
+
+            <label class="white" for="">Wind Direction</label>
+            <input type="number" class="form-control" step="0.01" name="Wind_direction" placeholder="Wind Direction" required><br>
+          </div>
+          <div class="col-md-6">
+            <label class="white" for="">Pressure</label>
+            <input type="number" class="form-control" step="0.01" name="Pressure" placeholder="Pressure" required><br>
+
+            <label class="white" for="">Air Temperature</label>
+            <input type="number" class="form-control" step="0.01" name="Air_temperature" placeholder="Air Temperature" required><br>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-success">Predict</button>
+        </div>
+      </form>
+
+      <div class="text-center" style="background:yellow; margin-top:20px; padding:20px;">
+        {{ prediction_text }}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
